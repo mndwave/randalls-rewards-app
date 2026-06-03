@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 // Bump this when making a native change that requires an APK/IPA rebuild.
 // Format: MAJOR.MINOR.PATCH — Obtainium uses this to detect updates.
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.0.1';
 
 const config: CapacitorConfig = {
   appId: 'gs.boldthin.randalls.rewards',
@@ -38,8 +38,12 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       // Dark content (charcoal text) on light sand background.
+      // overlaysWebView: true — canvas extends behind the status bar so the
+      // app's sand background shows through rather than a solid block.
+      // env(safe-area-inset-top) in globals.css pushes content below the bar.
       style: 'Dark',
       backgroundColor: '#f6f5f1',
+      overlaysWebView: true,
     },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
