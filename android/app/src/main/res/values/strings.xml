@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Randalls Rewards</string>
-    <string name="title_activity_main">Randalls Rewards</string>
+    <string name="app_name">Rewards</string>
+    <string name="title_activity_main">Rewards</string>
     <string name="package_name">gs.boldthin.randalls.rewards</string>
     <string name="custom_url_scheme">gs.boldthin.randalls.rewards</string>
 </resources>

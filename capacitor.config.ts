@@ -6,7 +6,7 @@ export const APP_VERSION = '1.0.0';
 
 const config: CapacitorConfig = {
   appId: 'gs.boldthin.randalls.rewards',
-  appName: 'Randalls Rewards',
+  appName: 'Rewards',
   webDir: 'www',
   server: {
     // Server URL mode: loads the live web app rather than bundled assets.
