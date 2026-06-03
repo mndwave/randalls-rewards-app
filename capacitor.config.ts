@@ -31,15 +31,15 @@ const config: CapacitorConfig = {
   plugins: {
     SplashScreen: {
       // launchShowDuration 0 — the web layer handles the loading animation.
-      // backgroundColor matches bg-sand (#F5F0E8) so there is no colour flash.
-      backgroundColor: '#F5F0E8',
+      // backgroundColor matches bg-sand (#f6f5f1) so there is no colour flash.
+      backgroundColor: '#f6f5f1',
       launchShowDuration: 0,
       autoHide: true,
     },
     StatusBar: {
       // Dark content (charcoal text) on light sand background.
       style: 'Dark',
-      backgroundColor: '#F5F0E8',
+      backgroundColor: '#f6f5f1',
     },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
