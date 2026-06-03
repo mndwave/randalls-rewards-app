@@ -60,6 +60,23 @@ cd android
 
 Signing is configured in `app/build.gradle` using `randalls-rewards-release.keystore`.
 
+**Android SDK (server-side builds):** SDK is at `~/android-sdk/` — NOT `/usr/lib/android-sdk/`
+(that only has platform-tools). Set `sdk.dir=/home/mndwave/android-sdk` in `android/local.properties`.
+Build credentials (keystore password, key alias) are in `~/seq1-healer/global.conf` under `[randalls_rewards_app]`.
+
+## Publishing releases (Obtainium)
+
+Obtainium tracks GitHub releases — a push to `main` does NOT update the app on device.
+After building, always publish a release:
+
+```bash
+GH_TOKEN=<mndwave_pat> gh release create vX.Y.Z \
+  android/app/build/outputs/apk/release/app-release.apk \
+  --title "vX.Y.Z — description"
+```
+
+Bump `APP_VERSION` in `capacitor.config.ts` for every APK that goes to users (native change marker).
+
 ## iOS build (Mac only)
 
 Requires:
