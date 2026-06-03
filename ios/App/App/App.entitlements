@@ -4,5 +4,10 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:rewards.randalls.boldthin.gs</string>
+		<string>webcredentials:rewards.randalls.boldthin.gs</string>
+	</array>
 </dict>
 </plist>
