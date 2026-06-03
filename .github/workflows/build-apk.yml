@@ -1,4 +1,4 @@
-name: Build APK
+name: Build APK + AAB
 
 on:
   push:
@@ -65,24 +65,28 @@ jobs:
           sed -i "s/versionName \"[^\"]*\"/versionName \"$VERSION_NAME\"/" android/app/build.gradle
           echo "Stamped versionCode=$VERSION_CODE versionName=$VERSION_NAME"
 
-      - name: Build Release APK
+      - name: Build Release APK + AAB
         working-directory: android
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleRelease bundleRelease --no-daemon
 
-      - name: Rename APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk randalls-rewards.apk
+      - name: Rename outputs
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk randalls-rewards.apk
+          cp android/app/build/outputs/bundle/release/app-release.aab randalls-rewards.aab
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: Randalls Rewards ${{ steps.version.outputs.name }}
-          body: Automated build
-          files: randalls-rewards.apk
+          body: Automated build — APK for sideload/Obtainium · AAB for Google Play
+          files: |
+            randalls-rewards.apk
+            randalls-rewards.aab
           fail_on_unmatched_files: true
 
       - name: Build summary
@@ -91,8 +95,9 @@ jobs:
           TAG: ${{ steps.version.outputs.tag }}
         run: |
           {
-            echo "## APK Build Complete"
+            echo "## Build Complete"
             echo "- Version: $VERSION"
             echo "- GitHub Release: $TAG"
-            echo "- APK: randalls-rewards.apk"
+            echo "- APK: randalls-rewards.apk (sideload / Obtainium)"
+            echo "- AAB: randalls-rewards.aab (Google Play submission)"
           } >> "$GITHUB_STEP_SUMMARY"
