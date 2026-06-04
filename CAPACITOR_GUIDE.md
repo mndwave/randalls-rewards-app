@@ -91,19 +91,46 @@ npx cap open ios
 # → Archive → Distribute App → App Store Connect
 ```
 
+## 🚨 PLATFORM PARITY MANDATE — ZERO TOLERANCE
+
+**Any native capability added to one platform MUST be mirrored on the other in the same commit.**
+
+This includes: plugins, permissions, deep link schemes, push notification config, wallet integrations, biometrics, location, sharing — anything native. Capacitor's cross-platform shell (`~/randalls-rewards-app`) builds both iOS and Android simultaneously, so plugin installation is automatic. What requires deliberate mirroring:
+
+- **Permissions**: AndroidManifest.xml ↔ Info.plist
+- **Push / wallet / auth credentials**: separate per-platform setup (FCM vs APNs, Google Wallet vs Apple Wallet)
+- **Platform-specific CSS/JS**: `html.ios-native` ↔ `html.android-native` rules must always be added as pairs
+- **Safe area handling**: all `mobile-nav-trigger`, `mobile-nav-close`, `mobile-nav-drawer`, `qr-header` CSS rules apply to both
+
+**Currently asymmetric (blocked externally — resolve when unblocked):**
+
+| Feature | Android | iOS |
+|---|---|---|
+| Push notifications | ✅ FCM configured | ⏳ APNs pending Apple Dev account |
+| Wallet | ✅ Google Wallet live | ⏳ Apple Wallet pending `.p12` cert + Apple Dev account |
+
+**Deferred plugins (not yet needed, install on both when the feature ships):**
+
+| Plugin | Use case |
+|---|---|
+| `@capacitor/geolocation` | "Find nearest venue" |
+| `@capacitor/share` | Native share sheet for referral codes |
+| `@capacitor/clipboard` | Clipboard write for referral code copy |
+| `@aparajita/capacitor-biometric-auth` | FaceID/TouchID re-auth (replaces magic-link per-session) |
+
 ## Native plugins installed
 
 | Plugin | Purpose |
 |---|---|
 | `@capacitor/app` | Deep link handling (magic-link auth opens app, not browser) |
-| `@capacitor/haptics` | Tactile feedback on stamp earn events |
-| `@capacitor/push-notifications` | FCM (Android) + APNs (iOS) loyalty notifications |
-| `@capacitor/local-notifications` | Offline-capable scheduled alerts |
-| `@capacitor/preferences` | Offline member state caching |
-| `@capacitor/network` | Online/offline detection |
-| `@capacitor/status-bar` | Status bar style (dark text on sand bg) |
-| `@capacitor/keyboard` | Keyboard UX on login forms |
-| `@capacitor/splash-screen` | Sand splash, no duration (web handles animation) |
+| `@capacitor/haptics` | Tactile feedback on stamp earn events — iOS + Android ✓ |
+| `@capacitor/push-notifications` | FCM (Android ✓) + APNs (iOS ⏳) |
+| `@capacitor/local-notifications` | Offline-capable scheduled alerts — iOS + Android ✓ |
+| `@capacitor/preferences` | Offline member state caching — iOS + Android ✓ |
+| `@capacitor/network` | Online/offline detection — iOS + Android ✓ |
+| `@capacitor/status-bar` | Status bar overlay config — iOS + Android ✓ |
+| `@capacitor/keyboard` | Keyboard UX on login forms — iOS + Android ✓ |
+| `@capacitor/splash-screen` | Sand splash on launch — iOS + Android ✓ |
 
 ## iOS Safe Area / Notch (2026-06-04 — all screens confirmed perfect)
 
