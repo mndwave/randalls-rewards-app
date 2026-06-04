@@ -7,33 +7,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Detect screenshots and bridge the event to the React web layer.
-        // The QR page listens for 'screenshotDetected', shows a status overlay,
-        // and flags the member's account for abuse pattern analysis.
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleScreenshot),
-            name: UIApplication.userDidTakeScreenshotNotification,
-            object: nil
-        )
+        // Override point for customization after application launch.
         return true
-    }
-
-    @objc private func handleScreenshot() {
-        DispatchQueue.main.async {
-            self.bridgeEvalJS("window.dispatchEvent(new CustomEvent('screenshotDetected'))")
-        }
-    }
-
-    private func bridgeEvalJS(_ js: String) {
-        func evalIn(_ vc: UIViewController) {
-            if let cap = vc as? CAPBridgeViewController {
-                cap.webView?.evaluateJavaScript(js, completionHandler: nil)
-                return
-            }
-            vc.children.forEach { evalIn($0) }
-        }
-        if let root = window?.rootViewController { evalIn(root) }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
