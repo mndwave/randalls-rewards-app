@@ -105,11 +105,58 @@ npx cap open ios
 | `@capacitor/keyboard` | Keyboard UX on login forms |
 | `@capacitor/splash-screen` | Sand splash, no duration (web handles animation) |
 
+## iOS Safe Area / Notch (2026-06-04 — all screens confirmed perfect)
+
+**📖 Full detail:** `~/seq1-intelligence/memory/randalls-rewards/session-learnings-2026-06-04-ios-safe-area-notch-fix.md`
+
+### What makes it work (three-part system):
+
+**1. Native config** (`capacitor.config.ts`):
+```typescript
+ios: { contentInset: 'never' }          // web view fills full screen behind status bar
+StatusBar: { overlaysWebView: true }     // no backgroundColor — web shows through
+```
+
+**2. Next.js layout** (`src/app/layout.tsx`):
+```typescript
+// themeColor MUST be here, NOT in metadata — otherwise Next.js 14 ignores viewportFit
+export const viewport: Viewport = { themeColor: '#264f51', viewportFit: 'cover' }
+```
+`viewportFit: 'cover'` → `viewport-fit=cover` in the HTML → `env(safe-area-inset-top)` returns real notch height (~59px).
+
+**3. NativeAppShell** (`src/components/NativeAppShell.tsx`):
+```typescript
+if (Capacitor.getPlatform() === 'ios') {
+  // Belt-and-suspenders: also patch viewport meta at runtime
+  vp.content += ', viewport-fit=cover'
+  // CSS scoping class — all iOS-only rules use html.ios-native
+  document.documentElement.classList.add('ios-native')
+}
+```
+
+### CSS rules (globals.css):
+```css
+html.ios-native body { padding-top: env(safe-area-inset-top); }
+html.ios-native .mobile-nav-trigger { top: calc(env(safe-area-inset-top) + 0.5rem); }
+html.ios-native .mobile-nav-drawer  { padding-top: calc(env(safe-area-inset-top) + 1.75rem); }
+```
+
+### Per-page fixes:
+- **QR page**: `useEffect` sets `body.backgroundColor = '#264f51'` on iOS so the dark gradient extends behind the notch. Resets on unmount.
+- Hamburger: `absolute` positioned → not affected by body padding → explicit CSS rule.
+- Nav drawer: `fixed top-0` background already fills notch; CSS rule adds safe area to content padding.
+
+### 🚨 Anti-patterns (ZERO TOLERANCE):
+- ❌ **NEVER import `@capacitor/status-bar` in the web app** — it's in the native shell only. Build fails silently on Vercel; old deploy serves forever.
+- ❌ **NEVER put `themeColor` in `metadata`** when using `export const viewport` — Next.js 14 ignores the viewport export entirely.
+- ❌ **NEVER rely on `body { padding-top }` for fixed/absolute elements** — they're viewport-relative and need explicit CSS rules.
+- ❌ **Auto-deploy from GitHub does NOT work** — use CLI: `VERCEL_TOKEN=wm1K1pcXeqvqlSwUmmFJGfgg npx vercel --prod --token wm1K1pcXeqvqlSwUmmFJGfgg --yes`
+
 ## Web app integration (`~/randalls-rewards`)
 
 - `src/lib/native.ts` — `isNative()`, `hapticSuccess()`, `hapticLight()`, `registerPushNotifications()`
-- `src/components/NativeAppShell.tsx` — deep link handler + push registration (mounted in root layout)
-- `src/app/globals.css` — `env(safe-area-inset-*)` padding on body + `.native-bottom-safe` class
+- `src/components/NativeAppShell.tsx` — deep link handler + push registration + iOS safe area init
+- `src/app/globals.css` — `html.ios-native` scoped safe-area rules + `.native-bottom-safe` class
 - `src/components/StampCard.tsx` — haptic on stamp collect
 
 ## App Store justification
