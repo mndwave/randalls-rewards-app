@@ -174,7 +174,8 @@ html.ios-native .mobile-nav-drawer  { padding-top: calc(env(safe-area-inset-top)
 - Nav drawer: `fixed top-0` background already fills notch; CSS rule adds safe area to content padding.
 
 ### 🚨 Anti-patterns (ZERO TOLERANCE):
-- ❌ **NEVER import `@capacitor/status-bar` in the web app** — it's in the native shell only. Build fails silently on Vercel; old deploy serves forever.
+- ❌ **NEVER call `setOverlaysWebView()` from the web app** — this was the original ban (2026-06-04: caused iOS notch to break). The fix is `overlaysWebView: true` in `capacitor.config.ts`, not a runtime call.
+- ✅ **`setStyle()` via dynamic import is permitted** — `@capacitor/status-bar` is in both shell and web app deps. `NativeAppShell.tsx` uses `import('@capacitor/status-bar').then(({ StatusBar, Style }) => StatusBar.setStyle(...))` per route for icon contrast. Only `setStyle()` — nothing else.
 - ❌ **NEVER put `themeColor` in `metadata`** when using `export const viewport` — Next.js 14 ignores the viewport export entirely.
 - ❌ **NEVER rely on `body { padding-top }` for fixed/absolute elements** — they're viewport-relative and need explicit CSS rules.
 - ❌ **Auto-deploy from GitHub does NOT work** — use CLI: `VERCEL_TOKEN=wm1K1pcXeqvqlSwUmmFJGfgg npx vercel --prod --token wm1K1pcXeqvqlSwUmmFJGfgg --yes`
