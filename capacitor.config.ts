@@ -24,8 +24,9 @@ const config: CapacitorConfig = {
     overScrollMode: 'never',
   },
   ios: {
-    // contentInset: 'always' — correct inset handling for the sand bg on notched devices.
-    contentInset: 'always',
+    // 'never' + overlaysWebView:true → WKWebView fills full screen behind status bar.
+    // CSS env(safe-area-inset-top) on body pushes content below the notch.
+    contentInset: 'never',
     allowsLinkPreview: false,
   },
   plugins: {
@@ -38,7 +39,7 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: 'Dark',
-      backgroundColor: '#f6f5f1',
+      overlaysWebView: true,
     },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
