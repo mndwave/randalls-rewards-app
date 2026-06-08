@@ -47,5 +47,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Randalls Rewards uses Face ID to confirm your identity before claiming rewards and stamps.</string>
 </dict>
 </plist>

@@ -116,7 +116,6 @@ This includes: plugins, permissions, deep link schemes, push notification config
 | `@capacitor/geolocation` | "Find nearest venue" |
 | `@capacitor/share` | Native share sheet for referral codes |
 | `@capacitor/clipboard` | Clipboard write for referral code copy |
-| `@aparajita/capacitor-biometric-auth` | FaceID/TouchID re-auth (replaces magic-link per-session) |
 
 ## Native plugins installed
 
@@ -131,6 +130,7 @@ This includes: plugins, permissions, deep link schemes, push notification config
 | `@capacitor/status-bar` | Status bar overlay config — iOS + Android ✓ |
 | `@capacitor/keyboard` | Keyboard UX on login forms — iOS + Android ✓ |
 | `@capacitor/splash-screen` | Sand splash on launch — iOS + Android ✓ |
+| `@aparajita/capacitor-biometric-auth` | Biometric re-auth for stamp + reward redemption — iOS + Android ✓ |
 
 ## iOS Safe Area / Notch (2026-06-04 — all screens confirmed perfect)
 
@@ -182,10 +182,15 @@ html.ios-native .mobile-nav-drawer  { padding-top: calc(env(safe-area-inset-top)
 
 ## Web app integration (`~/randalls-rewards`)
 
-- `src/lib/native.ts` — `isNative()`, `hapticSuccess()`, `hapticLight()`, `registerPushNotifications()`
+- `src/lib/native.ts` — `isNative()`, `hapticSuccess()`, `hapticLight()`, `registerPushNotifications()`, `checkBiometricAvailability()`, `authenticateWithBiometric()`
+- `src/hooks/useBiometricAuth.ts` — React hook wrapping biometric check + authenticate; returns `{ available: boolean | null, authenticate(reason) }`
 - `src/components/NativeAppShell.tsx` — deep link handler + push registration + iOS safe area init
 - `src/app/globals.css` — `html.ios-native` scoped safe-area rules + `.native-bottom-safe` class
 - `src/components/StampCard.tsx` — haptic on stamp collect
+
+**Biometric flow:** `/stamp/[slug]` and `/rewards/[slug]` call `useBiometricAuth()`. When `available=true`, tapping "Claim" / "Activate" triggers Touch ID / Face ID directly (no confirmation sheet). When `available=false` or `null` (web / unavailable), falls back to the teal confirmation sheet.
+
+**iOS requirement:** `NSFaceIDUsageDescription` must be present in `Info.plist` (added 2026-06-08) — without it iOS will crash when Face ID is triggered.
 
 ## App Store justification
 
@@ -194,7 +199,7 @@ Features that distinguish this from a web view:
 - **Deep links** — magic-link emails open the app directly (not a browser tab)
 - **Haptics** — tactile stamp feedback is impossible on web
 - **Safe-area handling** — proper notch/home-indicator insets
-- **Biometric re-auth** — future: FaceID/TouchID to replace magic-link per-session (add `@aparajita/capacitor-biometric-auth`)
+- **Biometric re-auth** — Touch ID / Face ID confirmation before stamp redemption and reward activation (`@aparajita/capacitor-biometric-auth` ✓ live)
 
 ## Google Play setup (when ready to submit)
 
