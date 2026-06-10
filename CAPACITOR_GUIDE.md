@@ -1,6 +1,6 @@
 # Randalls Rewards — Capacitor App Guide
 
-Server URL mode: the app loads `https://rewards.randalls.boldthin.gs` live.
+Server URL mode: the app loads `https://rewards.randalls.je` live.
 Web deploys update the app instantly. Only rebuild the APK/IPA when native plugins or
 platform manifests change.
 
@@ -24,7 +24,7 @@ randalls-rewards-app/
 | App ID | `gs.boldthin.randalls.rewards` |
 | Android package | `gs.boldthin.randalls.rewards` |
 | iOS bundle ID | `gs.boldthin.randalls.rewards` |
-| Server URL | `https://rewards.randalls.boldthin.gs` |
+| Server URL | `https://rewards.randalls.je` |
 | Deep links | `/auth/verify` + `/login` |
 
 ## Bumping the version (when native changes require a rebuild)
