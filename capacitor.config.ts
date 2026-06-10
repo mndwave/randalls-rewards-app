@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 // Bump this when making a native change that requires an APK/IPA rebuild.
 // Format: MAJOR.MINOR.PATCH — Obtainium uses this to detect updates.
-export const APP_VERSION = '1.0.5';
+export const APP_VERSION = '1.0.6';
 
 const config: CapacitorConfig = {
   appId: 'gs.boldthin.randalls.rewards',
@@ -12,7 +12,7 @@ const config: CapacitorConfig = {
     // Server URL mode: loads the live web app rather than bundled assets.
     // This means web deploys update the app instantly — no APK/IPA rebuild needed.
     // Only rebuild when native plugins or AndroidManifest/Info.plist change.
-    url: 'https://rewards.randalls.boldthin.gs',
+    url: 'https://rewards.randalls.je',
     cleartext: false,
     androidScheme: 'https',
   },

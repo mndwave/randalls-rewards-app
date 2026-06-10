@@ -30,7 +30,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="rewards.randalls.boldthin.gs"
+                    android:host="rewards.randalls.je"
                     android:pathPrefix="/auth/verify" />
             </intent-filter>
 
@@ -41,7 +41,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="rewards.randalls.boldthin.gs"
+                    android:host="rewards.randalls.je"
                     android:pathPrefix="/login" />
             </intent-filter>
 
