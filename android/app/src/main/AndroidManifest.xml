@@ -68,4 +68,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Camera — required for startScan() custom WebView scanner; not needed for Google Barcode Scanner sheet -->
+    <uses-permission android:name="android.permission.CAMERA" />
 </manifest>
