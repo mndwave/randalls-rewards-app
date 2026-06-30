@@ -6,6 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
+		<string>applinks:rewards.randalls.je</string>
+		<string>webcredentials:rewards.randalls.je</string>
 		<string>applinks:rewards.randalls.boldthin.gs</string>
 		<string>webcredentials:rewards.randalls.boldthin.gs</string>
 	</array>
