@@ -13,3 +13,8 @@ ios/App/.build/
 
 # Signing keystore — stored separately, committed only if encrypted
 # randalls-rewards-release.keystore
+
+# Firebase config — Android injected from GOOGLE_SERVICES_JSON CI secret at
+# build time; iOS plist kept locally only, unused while push goes direct-APNs
+android/app/google-services.json
+ios/App/App/GoogleService-Info.plist
